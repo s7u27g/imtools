@@ -78,9 +78,14 @@ class ImageProcessing(ReductionUtil):
         return
 
     def transform(self, offset):
-        offset = skimage.transform.AffineTransform(translation=offset)
-        self.input_image = skimage.transform.warp(im.output_image, matrix_trans)
-
+        _offset = skimage.transform.AffineTransform(translation=offset)
+        self.input_image = skimage.transform.warp(
+            image=self.output_image,
+            inverse_map=_offset
+        )
+        self.output_file['name'] += '_transform-' + str(offset)
+        self.output_image = self.input_image
+        return
 
     def remove_star(self, kernel_size):
         self.input_image = scipy.signal.medfilt2d(
