@@ -6,9 +6,6 @@ import skimage
 import astropy.io.fits
 import matplotlib.pyplot
 
-rawdata_dir = '/data/science/spitzer/I4/raw/obj/fits/'
-npydata_dir = '/data/science/spitzer/I4/raw/obj/npy/'
-outdata_dir = '/data/science/spitzer/I4/reduction/'
 
 # utility class
 # =============
@@ -21,10 +18,11 @@ class ReductionUtil(object):
 
 class ImageProcessing(ReductionUtil):
 
-    def __init__(self):
-        self.mkdir(rawdata_dir)
-        self.mkdir(npydata_dir)
-        self.mkdir(outdata_dir)
+    def __init__(self, path):
+
+        self.rawdata_path = path
+        self.mkdir(self.rawdata_path)
+
         self.header = None
         self.original_image_size = 0
         self.original_image = numpy.array([])
@@ -34,11 +32,10 @@ class ImageProcessing(ReductionUtil):
         self.obj_name = ''
         pass
 
-    def set_obj(self, obj_name):
+    def set_obj(self, obj_name, type='.npy'):
         self._clear_obj()
         self.obj_name = obj_name
-        self.rawdata_fits = os.path.join(rawdata_dir + obj_name + '.fits')
-        self.rawdata_npy = os.path.join(npydata_dir + obj_name + '.npy')
+        self.rawdata_file = os.path.join(self.rawdata_path + obj_name + type)
         return
 
     def load_rawfits(self, save_format='npy'):
@@ -51,7 +48,7 @@ class ImageProcessing(ReductionUtil):
         return
 
     def load_npy(self, save_format='npy'):
-        self._load_npy(self.rawdata_npy)
+        self._load_npy(self.rawdata_file)
         self.output_file['name'] = self.obj_name
         self.output_file['extention'] = '.' + save_format
         if self.original_image.shape[0] > self.original_image.shape[1]:
@@ -170,6 +167,6 @@ class ImageProcessing(ReductionUtil):
         return
 
     def _load_npy(self, filepath):
-        self.original_image = numpy.load(self.rawdata_npy)
+        self.original_image = numpy.load(self.rawdata_file)
         self._set_member(self.original_image)
         return
