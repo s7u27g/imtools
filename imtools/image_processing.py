@@ -28,7 +28,7 @@ class ImageProcessing(ReductionUtil):
         self.original_image = numpy.array([])
         self.input_image = numpy.array([])
         self.output_image = numpy.array([])
-        self.output_file = {'name': '', 'extention': ''}
+        self.output_file = {'name': '', 'process': '', 'extention': ''}
         self.obj_name = ''
         pass
 
@@ -61,7 +61,7 @@ class ImageProcessing(ReductionUtil):
             input=self.input_image,
             angle=degree
         )
-        self.output_file['name'] += '_rotate-' + str(degree)
+        self.output_file['process'] += '_rotate-' + str(degree)
         self.output_image = self.input_image
         return
 
@@ -70,7 +70,7 @@ class ImageProcessing(ReductionUtil):
             self.input_image = numpy.flipud(self.input_image)
         if direction == 'h':
             self.input_image = numpy.fliplr(self.input_image)
-        self.output_file['name'] += '_refrect-' + direction
+        self.output_file['process'] += '_refrect-' + direction
         self.output_image = self.input_image
         return
 
@@ -80,7 +80,7 @@ class ImageProcessing(ReductionUtil):
             image=self.output_image,
             inverse_map=_offset
         )
-        self.output_file['name'] += '_transform-' + str(offset)
+        self.output_file['process'] += '_transform-' + str(offset)
         self.output_image = self.input_image
         return
 
@@ -89,7 +89,7 @@ class ImageProcessing(ReductionUtil):
             input=self.input_image,
             kernel_size=(kernel_size, kernel_size)
         )
-        self.output_file['name'] += '_med-' + str(kernel_size)
+        self.output_file['process'] += '_med-' + str(kernel_size)
         self.output_image = self.input_image
         return
 
@@ -98,7 +98,7 @@ class ImageProcessing(ReductionUtil):
             image=self.input_image,
             output_shape=(im_size, im_size)
         )
-        self.output_file['name'] += '_resize-' + str(im_size)
+        self.output_file['process'] += '_resize-' + str(im_size)
         self.output_image = self.input_image
         return
 
@@ -106,7 +106,7 @@ class ImageProcessing(ReductionUtil):
         min = self.input_image.min(axis=None, keepdims=True)
         max = self.input_image.max(axis=None, keepdims=True)
         self.input_image = (self.input_image-min)/(max-min)
-        self.output_file['name'] += '_normalize'
+        self.output_file['process'] += '_normalize'
         self.output_image = self.input_image
         return
 
@@ -114,7 +114,7 @@ class ImageProcessing(ReductionUtil):
         xmean = self.input_image.mean(axis=None, keepdims=True)
         xstd  = numpy.std(self.input_image, axis=None, keepdims=True)
         self.input_image = (self.input_image-xmean)/xstd
-        self.output_file['name'] += '_znormalize'
+        self.output_file['process'] += '_znormalize'
         self.output_image = self.input_image
         return
 
@@ -156,7 +156,7 @@ class ImageProcessing(ReductionUtil):
         self.original_image = numpy.array([])
         self.input_image = numpy.array([])
         self.output_image = numpy.array([])
-        self.output_file = {'name': '', 'extention': ''}
+        self.output_file = {'name': '', 'process': '', 'extention': ''}
         return
 
     def _load_fits(self, filepath):
