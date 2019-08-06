@@ -1,4 +1,4 @@
-import os
+import os, pathlib
 import numpy
 import scipy.signal
 import scipy.ndimage
@@ -11,16 +11,19 @@ import matplotlib.pyplot
 # =============
 class ReductionUtil(object):
 
-   def mkdir(self, path, mode=0o755):
-       if os.path.exists(path): return None
-       return os.makedirs(path, mode)
+    def mkdir(self, path, mode=0o755):
+        if not isinstance(path, pathlib.Path):
+            path = pathlib.Path(path)
+        else: pass
+        path.mkdir(mode=mode, parents=True, exist_ok=True)
+        return
 
 
 class ImageProcessing(ReductionUtil):
 
     def __init__(self, path):
 
-        self.rawdata_path = path
+        self.rawdata_path = pathlib.Path(path)
         self.mkdir(self.rawdata_path)
 
         self.header = None
@@ -35,7 +38,7 @@ class ImageProcessing(ReductionUtil):
     def set_obj(self, obj_name, type='.npy'):
         self._clear_obj()
         self.obj_name = obj_name
-        self.rawdata_file = os.path.join(self.rawdata_path + obj_name + type)
+        self.rawdata_file = self.rawdata_path/(obj_name + type)
         return
 
     def load_rawfits(self, save_format='npy'):
