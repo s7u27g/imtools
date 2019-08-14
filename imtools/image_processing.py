@@ -27,7 +27,7 @@ class ImageProcessing(ReductionUtil):
         self.mkdir(self.rawdata_path)
 
         self.header = None
-        self.original_image_size = 0
+        self.image_size = 0
         self.original_image = numpy.array([])
         self.input_image = numpy.array([])
         self.output_image = numpy.array([])
@@ -46,8 +46,8 @@ class ImageProcessing(ReductionUtil):
         self.output_file['name'] = self.obj_name
         self.output_file['extention'] = '.' + save_format
         if self.original_image.shape[0] > self.original_image.shape[1]:
-            self.original_image_size = self.original_image.shape[0]
-        else: self.original_image_size = self.original_image.shape[1]
+            self.image_size = self.original_image.shape[0]
+        else: self.image_size = self.original_image.shape[1]
         return
 
     def load_npy(self, save_format='npy'):
@@ -55,8 +55,8 @@ class ImageProcessing(ReductionUtil):
         self.output_file['name'] = self.obj_name
         self.output_file['extention'] = '.' + save_format
         if self.original_image.shape[0] > self.original_image.shape[1]:
-            self.original_image_size = self.original_image.shape[0]
-        else: self.original_image_size = self.original_image.shape[1]
+            self.image_size = self.original_image.shape[0]
+        else: self.image_size = self.original_image.shape[1]
         return
 
     def rotate(self, degree):
@@ -103,6 +103,7 @@ class ImageProcessing(ReductionUtil):
         )
         self.output_file['process'] += '_resize-' + str(im_size)
         self.output_image = self.input_image
+        self.image_size = im_size
         return
 
     def normalize(self):
@@ -127,7 +128,7 @@ class ImageProcessing(ReductionUtil):
         return
 
     def cut(self, factor):
-        d = (self.original_image_size*factor)/2
+        d = (self.image_size*factor)/2
         max_pix = int(self.input_image.shape[0]/2 + d)
         min_pix = int(self.input_image.shape[0]/2 - d)
         self.input_image = self.input_image[min_pix:max_pix, min_pix:max_pix]
