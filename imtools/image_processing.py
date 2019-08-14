@@ -132,6 +132,8 @@ class ImageProcessing(ReductionUtil):
         max_pix = int(self.input_image.shape[0]/2 + d)
         min_pix = int(self.input_image.shape[0]/2 - d)
         self.input_image = self.input_image[min_pix:max_pix, min_pix:max_pix]
+        val = str(round(factor, 2)).replace('.', 'p')
+        self.output_file['process'] += '_cut-' + val
         self.output_image = self.input_image
         return
 
