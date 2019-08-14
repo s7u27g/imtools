@@ -83,7 +83,8 @@ class ImageProcessing(ReductionUtil):
             image=self.output_image,
             inverse_map=_offset
         )
-        self.output_file['process'] += '_transform-' + str(offset)
+        val = str(offset).replace('[', '').replace(']', '').replace(', ', '_')
+        self.output_file['process'] += '_transform-' + val
         self.output_image = self.input_image
         return
 
